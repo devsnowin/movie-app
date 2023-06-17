@@ -5,7 +5,7 @@ interface HomeProps {}
 
 const Home: FC<HomeProps> = ({}) => {
   const getMovies = async () => {
-    const res = await fetch('/api/movies');
+    const res = await fetch('/api/v1/movies');
     const json = await res.json();
     console.log(json);
   };

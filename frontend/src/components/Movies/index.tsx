@@ -10,7 +10,7 @@ const Movies: FC<MoviesProps> = ({ searchValue = '' }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
 
   const getMovies = async () => {
-    const res = await fetch('/api/movies');
+    const res = await fetch('/api/v1/movies');
     return await res.json();
   };
 

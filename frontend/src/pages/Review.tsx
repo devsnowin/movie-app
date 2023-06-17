@@ -1,6 +1,6 @@
 import type { Movie, Review } from '@/types';
 import { useEffect, type FC, useState, FormEvent } from 'react';
-import { useNavigate, useNavigation, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface ReviewProps {}
 
@@ -9,9 +9,11 @@ const Review: FC<ReviewProps> = ({}) => {
   const navigation = useNavigate();
   const [movie, setMovie] = useState<Movie>();
   const [review, setReview] = useState<String>('');
+  const [loading, setLoading] = useState<boolean>(false);;
+
 
   const findMovie = async () => {
-    const res = await fetch(`/api/movies/${id}`);
+    const res = await fetch(`/api/v1/movies/${id}`);
     return await res.json();
   };
 
@@ -20,12 +22,14 @@ const Review: FC<ReviewProps> = ({}) => {
       const data = (await findMovie()) as Movie;
       setMovie(data);
     })();
-  }, []);
+  }, [loading]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    await fetch('/api/movies', {
+    setLoading(true);
+
+    await fetch('/api/v1/movies', {
       method: 'POST',
       body: JSON.stringify({ reviewBody: review, imdbId: id }),
       headers: {
@@ -33,7 +37,8 @@ const Review: FC<ReviewProps> = ({}) => {
       },
     });
 
-    window.location.reload();
+    setLoading(false);
+    setReview('');
   };
 
   return (
@@ -54,12 +59,17 @@ const Review: FC<ReviewProps> = ({}) => {
       <form onSubmit={handleSubmit} className="w-full flex justify-between">
         <input
           type="text"
+          value={review as string | number | readonly string[] | undefined}
           onChange={(e) => setReview(e.target.value)}
           className="input input-primary w-[75%]"
           placeholder="write a review..."
           required
         />
-        <button className="btn btn-primary w-[20%]">Submit</button>
+        <button className="btn btn-primary w-[20%]">
+          { loading ? 
+          <span className="loading loading-spinner loading-md"></span>
+          : 
+          'Submit'}</button>
       </form>
       <div className="w-full my-8">
         <h1 className="font-bold text-lg">Reviews</h1>
