@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import Home from '@/pages/Home';
 import BaseLayout from './Layout/BaseLayout';
 import Search from './pages/Search';
@@ -9,7 +9,7 @@ interface AppProps {}
 
 const App: FC<AppProps> = ({}) => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <BaseLayout>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -17,7 +17,7 @@ const App: FC<AppProps> = ({}) => {
           <Route path="/movies/:id" element={<Review />} />
         </Routes>
       </BaseLayout>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 export default App;
